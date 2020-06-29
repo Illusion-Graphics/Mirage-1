@@ -1,0 +1,32 @@
+CAPI=2:
+
+name: Illusion:Mirage:MCU:1.0
+description: Single core 16-bit MCU
+
+filesets:
+  rtl:
+    depend:
+      - "=Illusion:RISC16:CPU:1.0"
+    files:
+      - src/Mirage1.sv : {file_type : systemVerilogSource}
+      - src/RAM_1R_1W.sv : {file_type : systemVerilogSource}
+
+  test:
+    depend:
+      - "=Illusion:Tests:Tests:1.0"
+    files:
+      - test/main.cpp : {file_type : cppSource}
+      - test/program.h : {file_type : cppSource, is_include_file: true}
+
+targets:
+  default:
+    filesets: [rtl]
+  test:
+    filesets: [test, rtl]
+    default_tool: verilator
+    toplevel: [Mirage1]
+    tools:
+      verilator:
+        mode: cc
+        verilator_options:
+          - "--trace"
